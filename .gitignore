@@ -1,0 +1,50 @@
+```gitignore
+# Ambiente virtual Python
+.venv/
+venv/
+env/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de configuração local
+.env
+.env.local
+*.env
+
+# Arquivos do VS Code
+.vscode/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.bak
+
+# Cache de ferramentas
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Builds e distribuições
+build/
+dist/
+*.egg-info/
+
+# Arquivos grandes de teste
+videos/
+recordings/
+capturas/
+screenshots/
+
+# Configurações locais do projeto
+config.local.py
+settings.local.py
