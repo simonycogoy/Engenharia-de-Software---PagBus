@@ -1,0 +1,56 @@
+# PagBus
+
+O **PagBus** é um projeto acadêmico desenvolvido para a disciplina de Engenharia de Software.  
+A proposta do sistema é simular um aplicativo de pagamento de passagem de ônibus utilizando **saldo virtual** e **QR Code**.
+
+O usuário se cadastra no aplicativo, recebe um QR Code pessoal, recarrega saldo de forma simulada e utiliza esse QR Code para validar a passagem em uma catraca simulada no notebook.
+
+## Objetivo do Projeto
+
+O objetivo do PagBus é demonstrar uma alternativa digital para o pagamento de passagens de ônibus, reduzindo a necessidade de dinheiro físico e tornando o processo de embarque mais simples.
+
+Nesta versão, o pagamento é apenas simulado. Não há integração real com Pix, banco ou cartão.
+
+## Funcionamento Geral
+
+O sistema funciona da seguinte forma:
+
+1. O usuário realiza cadastro no aplicativo.
+2. O sistema gera um QR Code pessoal para o usuário.
+3. O usuário recarrega saldo virtual.
+4. O QR Code é exibido na tela do celular.
+5. A catraca simulada no notebook lê o QR Code pela câmera.
+6. O sistema verifica se o usuário possui saldo suficiente.
+7. Se houver saldo, a passagem é liberada.
+8. Se não houver saldo ou o QR Code for inválido, a passagem é negada.
+
+## Valor da Passagem
+
+O valor utilizado para a passagem no projeto é de:
+
+**R$ 5,50**
+
+## Principais Funcionalidades
+
+- Cadastro de usuário
+- Login com CPF e senha
+- Geração de QR Code pessoal
+- Consulta de saldo
+- Recarga de saldo simulada
+- Exibição do cartão virtual
+- Leitura do QR Code pela câmera do notebook
+- Validação da passagem
+- Débito automático do saldo
+- Feedback visual e sonoro na catraca simulada
+
+## Tecnologias Utilizadas
+
+- Python
+- OpenCV
+- Tkinter
+- Pygame
+- Git e GitHub
+- TypeScript
+- Flutter/Dart
+
+## Estrutura do Projeto
