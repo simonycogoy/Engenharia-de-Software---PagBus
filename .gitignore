@@ -48,3 +48,6 @@ screenshots/
 # Configurações locais do projeto
 config.local.py
 settings.local.py
+
+# Arquivos JSON
+*.json
