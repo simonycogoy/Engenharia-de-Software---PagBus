@@ -51,12 +51,48 @@ ALTURA_TELA = 480
 X_TELA = X_VALIDADOR + (LARGURA_VALIDADOR - LARGURA_TELA) // 2
 Y_TELA = Y_VALIDADOR + 230
 
-canvas.create_rectangle(X_TELA, Y_TELA, X_TELA + LARGURA_TELA, Y_TELA + ALTURA_TELA, fill="#1F7A3D", outline="#f2f7ff", width=4)
+canvas.create_rectangle(
+    X_TELA,
+    Y_TELA,
+    X_TELA + LARGURA_TELA,
+    Y_TELA + ALTURA_TELA,
+    fill="#1F7A3D",
+    outline="#f2f7ff",
+    width=4
+)
 
-texto_principal = canvas.create_text(X_TELA + LARGURA_TELA // 2, Y_TELA + 200, text="APROXIME\nO QR CODE", fill="#000000", font=("Silkscreen", 58, "bold"), justify="center")
-texto_emoji = canvas.create_text(X_TELA + LARGURA_TELA // 2, Y_TELA + 310, text="", fill="#000000", font=("Arial", 70))
+texto_principal = canvas.create_text(
+    X_TELA + LARGURA_TELA // 2,
+    Y_TELA + 200, text="APROXIME\nO QR CODE",
+    fill="#000000",
+    font=("Silkscreen", 58, "bold"),
+    justify="center"
+)
 
-texto_horario = canvas.create_text(X_TELA + LARGURA_TELA // 2, Y_TELA + 425, text="", fill="#000000", font=("Silkscreen", 20))
+texto_emoji = canvas.create_text(
+    X_TELA + LARGURA_TELA // 2,
+    Y_TELA + 305,
+    text="",
+    fill="#000000",
+    font=("Noto Color Emoji", 46)
+)
+
+texto_detalhes = canvas.create_text(
+    X_TELA + LARGURA_TELA // 2,
+    Y_TELA + 365,
+    text="",
+    fill="#000000",
+    font=("Arial", 26),
+    justify="center"
+)
+
+texto_horario = canvas.create_text(
+    X_TELA + LARGURA_TELA // 2,
+    Y_TELA + 425,
+    text="",
+    fill="#000000",
+    font=("Silkscreen", 20)
+)
 
 
 # LEDS
@@ -108,27 +144,103 @@ def resetar_tela():
 
     mudar_cor_leds("#cfcfcf")
 
-    canvas.itemconfig(texto_principal, text="APROXIME\nO QR CODE", fill="#000000")
-    canvas.itemconfig(texto_emoji, text="")
+    canvas.coords(texto_principal, X_TELA + LARGURA_TELA // 2, Y_TELA + 200)
+    canvas.coords(texto_emoji, X_TELA + LARGURA_TELA // 2, Y_TELA + 305)
+    canvas.coords(texto_detalhes, X_TELA + LARGURA_TELA // 2, Y_TELA + 365)
+
+    canvas.itemconfig(
+        texto_principal,
+        text="APROXIME\nO QR CODE",
+        fill="#000000",
+        font=("Silkscreen", 58, "bold")
+    )
+
+    canvas.itemconfig(
+        texto_emoji,
+        text="",
+        font=("Noto Color Emoji", 46)
+    )
+
+    canvas.itemconfig(
+        texto_detalhes,
+        text="",
+        font=("Arial", 26)
+    )
 
     em_processamento = False
     aguardando_remover_qrcode = True
 
-def mostrar_qrcode_valido():
+def mostrar_qrcode_valido(resultado):
     mudar_cor_leds("green")
 
-    canvas.itemconfig(texto_principal, text="QR CODE\nVÁLIDO\n", fill="#000000")
-    canvas.itemconfig(texto_emoji, text="✅", font=("Noto Color Emoji", 60))
+    nome = resultado.get("nome", "USUÁRIO")
+    saldo = resultado.get("saldo", 0)
+
+    canvas.coords(texto_principal, X_TELA + LARGURA_TELA // 2, Y_TELA + 175)
+
+    canvas.itemconfig(
+        texto_principal,
+        text=f"PASSAGEM\nLIBERADA\n{nome}",
+        fill="#000000",
+        font=("Silkscreen", 34, "bold")
+    )
+
+    canvas.itemconfig(
+        texto_emoji,
+        text="✅",
+        font=("Noto Color Emoji", 46)
+    )
+
+    canvas.itemconfig(
+        texto_detalhes,
+        text=f"Saldo: R$ {saldo:.2f}",
+        fill="#000000",
+        font=("Arial", 28)
+    )
 
     bip()
 
     janela.after(3000, resetar_tela)
 
-def mostrar_qrcode_invalido():
+def mostrar_qrcode_invalido(resultado):
     mudar_cor_leds("red")
 
-    canvas.itemconfig(texto_principal, text="QR CODE\nINVÁLIDO\n", fill="#000000")
-    canvas.itemconfig(texto_emoji, text="❌", font=("Noto Color Emoji", 60))
+    saldo = resultado.get("saldo", 0)
+    motivo = resultado.get("motivo", "QR Code inválido")
+
+    # sobe a mensagem PASSAGEM BLOQUEADA
+    canvas.coords(
+        texto_principal,
+        X_TELA + LARGURA_TELA // 2,
+        Y_TELA + 145
+    )
+
+    # sobe o X vermelho
+    canvas.coords(
+        texto_emoji,
+        X_TELA + LARGURA_TELA // 2,
+        Y_TELA + 270
+    )
+
+    canvas.itemconfig(
+        texto_principal,
+        text="PASSAGEM\nBLOQUEADA",
+        fill="#000000",
+        font=("Silkscreen", 44, "bold")
+    )
+
+    canvas.itemconfig(
+        texto_emoji,
+        text="❌",
+        font=("Noto Color Emoji", 46)
+    )
+
+    canvas.itemconfig(
+        texto_detalhes,
+        text=f"{motivo}\nSaldo: R$ {saldo:.2f}",
+        fill="#000000",
+        font=("Arial", 26)
+    )
 
     tres_bips()
 
@@ -150,28 +262,29 @@ def verificar_qrcode():
     global em_processamento
     global aguardando_remover_qrcode
 
-    resultado = reconhecimento.ler_qrcode()
-
-    # Se acabou de ler um QR Code, espera ele sair da câmera
     if aguardando_remover_qrcode:
-        if resultado is None:
+        if not reconhecimento.tem_qrcode_na_camera():
             aguardando_remover_qrcode = False
 
         janela.after(100, verificar_qrcode)
         return
-    
-    # Se está mostrando "válido" ou "inválido", não lê outro
+
     if em_processamento:
         janela.after(100, verificar_qrcode)
         return
 
-    if resultado == "valido":
-        em_processamento = True
-        mostrar_qrcode_valido()
+    resultado = reconhecimento.ler_qrcode()
 
-    elif resultado == "invalido":
-        em_processamento = True
-        mostrar_qrcode_invalido()
+    if resultado is not None:
+        status = resultado.get("status")
+
+        if status == "valido":
+            em_processamento = True
+            mostrar_qrcode_valido(resultado)
+
+        elif status == "invalido":
+            em_processamento = True
+            mostrar_qrcode_invalido(resultado)
 
     janela.after(100, verificar_qrcode)
 
