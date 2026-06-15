@@ -32,7 +32,7 @@ class ReconhecimentoQRCode:
         transaction = db.transaction()
 
         @firestore.transactional
-        def executar_transacao(transaction, usuario_ref):
+        def executar_transacao(transaction, usuario_ref, usuario_id):
             usuario_doc = usuario_ref.get(transaction=transaction)
 
             if not usuario_doc.exists:
@@ -78,17 +78,13 @@ class ReconhecimentoQRCode:
                 "ultimo_uso_catraca": firestore.SERVER_TIMESTAMP
             })
 
-            passagem_ref = db.collection("passagens").document()
+            passagem_ref = usuario_ref.collection("passagens").document()
 
             transaction.set(passagem_ref, {
-                "usuario_id": usuario_id,
-                "nome": nome,
                 "valor": VALOR_PASSAGEM,
-                "saldo_antes": saldo,
-                "saldo_depois": novo_saldo,
                 "status": "aprovada",
                 "linha": "UNIPAMPA",
-                "criado_em": firestore.SERVER_TIMESTAMP
+                "data": firestore.SERVER_TIMESTAMP
             })
 
             return {
