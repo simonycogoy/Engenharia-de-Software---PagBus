@@ -84,7 +84,8 @@ class ReconhecimentoQRCode:
                 "valor": VALOR_PASSAGEM,
                 "status": "aprovada",
                 "linha": "UNIPAMPA",
-                "data": firestore.SERVER_TIMESTAMP
+                "data": firestore.SERVER_TIMESTAMP,
+                "empresa": "Anversa"
             })
 
             return {
