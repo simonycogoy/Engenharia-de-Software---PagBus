@@ -387,33 +387,12 @@ def criar_card_empresa(x, y, nome, arquivo_logo, cor_borda, tag):
         tags=("tela_empresa", tag)
     )
 
-    # Borda interna branca
-    canvas.create_rectangle(
-        x - largura_card // 2 + 12,
-        y - altura_card // 2 + 12,
-        x + largura_card // 2 - 12,
-        y + altura_card // 2 - 12,
-        fill="#101010",
-        outline="#f2f7ff",
-        width=2,
-        tags=("tela_empresa", tag)
-    )
-
     imagens_tk[tag] = carregar_logo(arquivo_logo, 500, 500)
 
     canvas.create_image(
         x,
-        y - 10,
+        y,
         image=imagens_tk[tag],
-        tags=("tela_empresa", tag)
-    )
-
-    canvas.create_text(
-        x,
-        y + 105,
-        text=nome,
-        fill="#f2f7ff",
-        font=("Arial", 34, "bold"),
         tags=("tela_empresa", tag)
     )
 
